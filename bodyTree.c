@@ -12,46 +12,48 @@ address Alokasi(infotype X) {
 }
 
 void Create_tree(address root) {
-	address child, parent;
+	address child, parent, Pnew = root;
 	infotype X;
 	char c;
 	do {
 		do {
 			if (root == nil) {
 				printf("\nMasukan root ");
-			} else {
-				printf("\nMasukan child dari %c ", parent->info);
-			}
-			X = getche();
-			if (root == nil) {
+				X = getche();
 				root = Alokasi(X);
-			} else if (parent->FS == nil) {
-				child = Alokasi(X);
-				parent->FS = Alokasi(X);
-			} else { /*if (parent->FS->NB == nil)*/
+			} else {
+				parent = Pnew;
+				printf("\nMasukan child dari %c ", parent->info);
+				if (parent->FS == nil) {
+//					child = Alokasi(X);
+					parent->FS = Alokasi(X);
+				} else { /*if (parent->FS->NB == nil)*/
 //			child = Alokasi(X);
-				child = parent->FS;
-				while (child->NB != nil) {
-					child = child->NB;
+					child = parent->FS;
+					while (child->NB != nil) {
+						child = child->NB;
+					}
+					child->NB = Alokasi(X);
 				}
-				child->NB = Alokasi(X);
-//			Pnew= = child;
 			}
-			parent = root;
+			Pnew = parent->FS;
+//			parent = root;
+			c = getch();
 			if (c == 'y' || c == 'Y') {
 				printf("\nInsert child lagi untuk %c?", parent->info);
 			} else {
 				printf("\nInsert child untuk %c? ", parent->info);
 			}
-			c = getch();
 		} while (c == 'y' || c == 'Y');
-		if (root == nil) {
+		if (parent->FS != nil) {
 			printf("\nNext parent?");
 			c = getch();
-			if (parent->FS) {
-				parent = parent->FS;
-			} else {
-				parent = parent->NB;
+			if(c == 'y' || c =='Y') {
+				if (parent->FS != nil) {
+					parent = parent->FS;
+				} else {
+					parent = parent->NB;
+				}
 			}
 		}
 	} while (c == 'y' || c == 'Y');
