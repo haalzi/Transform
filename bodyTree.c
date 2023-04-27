@@ -11,133 +11,98 @@ address Alokasi(infotype X) {
 	return Pnew;
 }
 
-void Create_tree(address root) {
-	address child, parent, Pnew = root;
+void Create_tree(address *root, int Jml_Node) {
+
+	address child, parent, Pnew = *root;
 	infotype X;
 	char c;
-	do {
-		do {
-			if (root == nil) {
-				printf("\nMasukan root ");
-				X = getche();
-				root = Alokasi(X);
-			} else {
-				parent = Pnew;
-				printf("\nMasukan child dari %c ", parent->info);
-				if (parent->FS == nil) {
-//					child = Alokasi(X);
-					parent->FS = Alokasi(X);
-				} else { /*if (parent->FS->NB == nil)*/
-//			child = Alokasi(X);
-					child = parent->FS;
-					while (child->NB != nil) {
-						child = child->NB;
+
+	int posisi = 1, Jml_son = 1, jum_enty = 1;
+    //address parent;
+	parent = NULL;
+
+	*root = NULL;
+	if (Jml_Node > 0) {
+		printf("\nMasukkan nilai untuk Root: ");
+		*root = (address)malloc(sizeof(AVL));
+		scanf(" %c", &(*root)->info);
+		fflush(stdin);
+		jum_enty++;
+
+		(*root)->PR = NULL;
+		(*root)->LS = NULL;
+		(*root)->RS = NULL;
+
+		parent = *root;
+
+		while (jum_enty <= Jml_Node) {
+			printf("\nNilai Parent: %c", parent->info);
+			printf("\nJumlah Anak: ");
+			scanf("%d", &Jml_son);
+			fflush(stdin);
+
+			if ((Jml_son > 0) && (posisi + Jml_son <= Jml_Node)) {
+				int i;
+				//address child;
+				child = NULL;
+				address childSebelum;
+				childSebelum = NULL;
+				for (i = 1; i <= Jml_son; i++) {
+					posisi = posisi + 1;
+					printf("Anak ke %d: ", i);
+					child = (address)malloc(sizeof(AVL));
+					scanf(" %c", &(child->info));
+					fflush(stdin);
+					child->LS = NULL;
+					jum_enty++;
+
+					if (i == 1) {
+						parent->LS = child;
+						childSebelum = child;
+					} else if (i < Jml_son) {
+						childSebelum->RS = child;
+						childSebelum = child;
+					} else {
+						childSebelum->RS = child;
+						child->RS = NULL;
 					}
-					child->NB = Alokasi(X);
+					child->PR = parent;
 				}
-			}
-			Pnew = parent->FS;
-//			parent = root;
-			c = getch();
-			if (c == 'y' || c == 'Y') {
-				printf("\nInsert child lagi untuk %c?", parent->info);
-			} else {
-				printf("\nInsert child untuk %c? ", parent->info);
-			}
-		} while (c == 'y' || c == 'Y');
-		if (parent->FS != nil) {
-			printf("\nNext parent?");
-			c = getch();
-			if(c == 'y' || c =='Y') {
-				if (parent->FS != nil) {
-					parent = parent->FS;
+				if((parent->RS) == NULL) {
+					parent =(parent->LS);
 				} else {
-					parent = parent->NB;
+					parent = parent->RS;
 				}
+
+			} else if (Jml_son == 0) {
+				parent = parent->RS;
+			} else if (posisi+Jml_son > Jml_Node) {
+				printf("\n\nOVERFLOW melebihi alokasi yang sudah ada");
+				parent = parent;
 			}
 		}
-	} while (c == 'y' || c == 'Y');
+	}
 }
 
-//int Count (address X) {
-//	int j = 1;
-//	address Pcur = 1;
-//	boolean Status = true;
-//	do {
-//		if (X[Pcur].ps_fs != nil && Status == true) {
-//			Pcur = X[Pcur].ps_fs;
-//			j++;
-//		} else if (X[Pcur].ps_nb != nil) {
-//			Pcur = X[Pcur].ps_nb;
-//			j++;
-//			Status = true;
-//		} else {
-//			Pcur = X[Pcur].ps_pr;
-//			Status = false;
-//		}
-//	} while(X[Pcur].ps_pr != nil);
-//	return j;
-//}
-//
-//
-//void InOrder (address P) {
-//	address Pcur = 1;
-//	boolean Status = true;
-//
-//	while(Pcur != nil) {
-//		if(P[Pcur].ps_fs != nil && Status == true) {
-//			Pcur = P[Pcur].ps_fs;
-//		} else {
-//			if(Status) {
-//				printf("%c ", P[Pcur].info);
-//			}
-//
-//			if(Pcur == P[P[Pcur].ps_pr].ps_fs) {
-//				printf("%c ", P[P[Pcur].ps_pr].info);
-//			}
-//
-//			if(P[Pcur].ps_nb != nil) {
-//				Pcur = P[Pcur].ps_nb;
-//				Status = true;
-//			} else {
-//				Pcur = P[Pcur].ps_pr;
-//				Status = false;
-//			}
-//		}
-//	}
-//}
-//
-//void PostOrder (address P) {
-//	address Pcur = 1;
-//	boolean Status = true;
-//	while(Pcur != nil) {
-//		if(P[Pcur].ps_fs && Status == true) {
-//			Pcur = P[Pcur].ps_fs;
-//		} else {
-//			printf("%c ", P[Pcur].info);
-//			if(P[Pcur].ps_nb != nil) {
-//				Pcur = P[Pcur].ps_nb;
-//				Status = true;
-//			} else {
-//				Pcur = P[Pcur].ps_pr;
-//				Status = false;
-//			}
-//		}
-//	}
-//}
-//
-//int Level (address P, infotype X) {
-//	address Current = 1;
-//	address hitung = nil;
-//	boolean kondisi = true;
-//	while (P[Current].info != X) {
-//		Current++;
-//	}
-//	while (P[Current].ps_pr != nil) {
-//		Current = P[Current].ps_pr;
-//		hitung++;
-//	}
-//	return hitung;
-//}
-//return hitung;
-//}
+void Print_Tree(address root, char tab[])
+{
+	char tempTab[255];
+	strcpy(tempTab, tab);
+	strcat(tempTab, "-");
+
+	if (root!=NULL)
+	{
+		printf("%s%c\n", tab,root->info);
+		Print_Tree(root->LS, tempTab);
+		Print_Tree(root->RS, tab);
+	}
+}
+
+void Tampil_menu()
+{
+	printf("1. Create Tree\n");
+	printf("2. Convert Tree\n");
+	printf("3. Print Tree\n");
+	printf("4. Change Theme\n");
+}
+
