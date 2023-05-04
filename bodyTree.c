@@ -1,11 +1,12 @@
 #include "hederTree.h"
 
 address Alokasi(infotype X) {
-	address Pnew = (address)malloc(sizeof(address));
+	address Pnew = (address)malloc(sizeof(AVL));
 	if (Pnew != nil) {
 		Pnew->info = X;
 		Pnew->LS = nil;
 		Pnew->RS = nil;
+		Pnew->PR = nil;
 		Pnew->tinggi = 0;
 	}
 	return Pnew;
@@ -18,20 +19,18 @@ void Create_tree(address *root, int Jml_Node) {
 	char c;
 
 	int posisi = 1, Jml_son = 1, jum_enty = 1;
-    //address parent;
+	//address parent;
 	parent = NULL;
 
-	*root = NULL;
+//	*root = NULL;
 	if (Jml_Node > 0) {
-		printf("\nMasukkan nilai untuk Root: ");
-		*root = (address)malloc(sizeof(AVL));
-		scanf(" %c", &(*root)->info);
-		fflush(stdin);
-		jum_enty++;
-
-		(*root)->PR = NULL;
-		(*root)->LS = NULL;
-		(*root)->RS = NULL;
+		if (*root == NULL) {
+			printf("\nMasukkan nilai untuk Root: ");
+			scanf(" %c", &X);
+			*root = Alokasi(X);
+			fflush(stdin);
+			jum_enty++;
+		}
 
 		parent = *root;
 
@@ -50,20 +49,19 @@ void Create_tree(address *root, int Jml_Node) {
 				for (i = 1; i <= Jml_son; i++) {
 					posisi = posisi + 1;
 					printf("Anak ke %d: ", i);
-					child = (address)malloc(sizeof(AVL));
-					scanf(" %c", &(child->info));
+					scanf(" %c", &X);
+					child = Alokasi(X);
 					fflush(stdin);
-					child->LS = NULL;
 					jum_enty++;
 
 					if (i == 1) {
-						parent->LS = child;
+						parent->FS = child;
 						childSebelum = child;
 					} else if (i < Jml_son) {
-						childSebelum->RS = child;
+						childSebelum->NB = child;
 						childSebelum = child;
 					} else {
-						childSebelum->RS = child;
+						childSebelum->NB = child;
 						child->RS = NULL;
 					}
 					child->PR = parent;
@@ -84,25 +82,22 @@ void Create_tree(address *root, int Jml_Node) {
 	}
 }
 
-void Print_Tree(address root, char tab[])
-{
+void Print_Tree(address root, char tab[]) {
 	char tempTab[255];
 	strcpy(tempTab, tab);
 	strcat(tempTab, "-");
 
-	if (root!=NULL)
-	{
+	if (root!=NULL) {
 		printf("%s%c\n", tab,root->info);
 		Print_Tree(root->LS, tempTab);
 		Print_Tree(root->RS, tab);
 	}
 }
 
-void Tampil_menu()
-{
-	printf("1. Create Tree\n");
-	printf("2. Convert Tree\n");
-	printf("3. Print Tree\n");
-	printf("4. Change Theme\n");
+void Tampil_menu() {
+	printf("\nPilih menu : ");
+	printf("\n1. Create Tree");
+	printf("\n2. Convert Tree");
+	printf("\n3. Print Tree");
+	printf("\n4. Change Theme\n");
 }
-
