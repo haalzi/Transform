@@ -5,18 +5,19 @@
 int main(int argc, char *argv[]) {
 	
 	//KAMUS DATA
-	address root;
+	addressNBT root = NULL;
+	addressBT Newroot = NULL;
+	infotype X;
 	int jmlnode;
 	int choice;
 	char teb[] = " ";
-	char ulang = 'y';
+	char ulang;
 
 	//PROGRAM
 
 	do{
-
 		Tampil_menu();
-		printf("\nPilih :");
+		printf("\nPilih : ");
 		scanf("%d", &choice);
 
 		switch(choice)
@@ -24,14 +25,24 @@ int main(int argc, char *argv[]) {
 			case 1:
 				printf("Masukkan jumlah node :");
 				scanf("%d", &jmlnode);
-				Create_tree(&root,jmlnode);
+				Create_tree(&root, jmlnode);
 			break;
 
 			case 2:
+				loading();
+				Preorder(root, &Newroot);
+//				Newroot = convert(Newroot, root->info);
+//				Print_TreeBT(Newroot, teb);
 			break;
 
 			case 3:
-				Print_Tree(root, teb);
+//				PreorderNBT(root);
+				printf("\n");
+				Print_TreeNBT(root, teb);
+				printf("\n");
+//				PreorderBT(Newroot);
+				inOrder(Newroot);
+//				Print_TreeBT(Newroot, teb);
 			break;
 
 			case 4:
@@ -39,8 +50,9 @@ int main(int argc, char *argv[]) {
 
 		}
 
-	printf("/nApakah ingin kembali ke menu?");
+	printf("\nApakah ingin kembali ke menu?");
 	ulang = getch();
+	system("cls");
 	}while(ulang == 'y');
 
 }
